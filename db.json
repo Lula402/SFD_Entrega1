@@ -1,1 +1,36 @@
-
+{
+    "users": [
+            {
+              "id":1,
+              "username":"Explorer",
+              "state":true,
+                "deck":[iss074e0432728,JSC-20160921-PH_JNB01_0002,jsc2018e093536,S68-50967,s93-045723] 
+            },
+            {
+              "id":2,
+              "username":"Astronaut",
+              "state":true,
+                "deck":[art002e008487,jsc2024e062560,art002e009007,as11-40-5875,iss075e0010873] 
+            },
+            {
+              "id":3,
+              "username":"Astronomer",
+              "state":true,
+                "deck":[behemoth-black-hole-found-in-an-unlikely-place_26209716511_o,PIA18033,art002e009287,PIA25163,PIA00271] 
+            },
+            {
+              "id":4,
+              "username":"Commander",
+              "state":true,
+                "deck":[jsc2025e015859,jsc2024e050130,s93e5033,s27-148-008,GSFC_20171208_Archive_e002076] 
+            },
+            {
+              "id":5,
+              "username":"Pilot",
+              "state":true,
+                "deck":[ED07-0045-3,0701901,jsc2024e050128,iss036e029920,iss036e029229] 
+            }
+          ]
+    ,
+    "worlds":[1,2,3,4,5,6,7,8]    
+}
