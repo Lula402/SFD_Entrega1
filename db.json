@@ -5,35 +5,35 @@
               "username":"Explorer",
               "state":true,
                  "img":"https://i.pinimg.com/736x/f6/6a/52/f66a521fff24ba140876f01cbc1463d8.jpg",
-                "deck":[iss074e0432728,JSC-20160921-PH_JNB01_0002,jsc2018e093536,S68-50967,s93-045723] 
+                "deck":["iss074e0432728","JSC-20160921-PH_JNB01_0002","jsc2018e093536","S68-50967","s93-045723"] 
             },
             {
               "id":2,
               "username":"Astronaut",
               "state":true,
                 "img":"https://i.pinimg.com/736x/58/20/8a/58208a064a51bd0478bb622f5701aa6b.jpg",
-                "deck":[art002e008487,jsc2024e062560,art002e009007,as11-40-5875,iss075e0010873] 
+                "deck":["art002e008487","jsc2024e062560","art002e009007","as11-40-5875","iss075e0010873"] 
             },
             {
               "id":3,
               "username":"Astronomer",
               "state":true,
                 "img":"https://i.pinimg.com/1200x/f5/40/ab/f540abd9b7135028be708ecf5dc8bcbf.jpg",
-                "deck":[behemoth-black-hole-found-in-an-unlikely-place_26209716511_o,PIA18033,art002e009287,PIA25163,PIA00271] 
+                "deck":["behemoth-black-hole-found-in-an-unlikely-place_26209716511_o","PIA18033","art002e009287","PIA25163","PIA00271"] 
             },
             {
               "id":4,
               "username":"Commander",
               "state":true,
                 "img":"https://i.pinimg.com/1200x/2a/c9/16/2ac91625bb09422368f79dbbbe4ed454.jpg",
-                "deck":[jsc2025e015859,jsc2024e050130,s93e5033,s27-148-008,GSFC_20171208_Archive_e002076] 
+                "deck":["jsc2025e015859","jsc2024e050130","s93e5033","s27-148-008","GSFC_20171208_Archive_e002076"] 
             },
             {
               "id":5,
               "username":"Pilot",
               "state":true,
                  "img":"https://i.pinimg.com/736x/31/6b/2c/316b2c00df5e7c013ee9e35aa19aae5f.jpg",
-                "deck":[ED07-0045-3,0701901,jsc2024e050128,iss036e029920,iss036e029229]
+                "deck":["ED07-0045-3","0701901","jsc2024e050128","iss036e029920","iss036e029229"]
             }
           ]
     ,
