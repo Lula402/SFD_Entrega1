@@ -13,20 +13,20 @@ public class NasaGalleryManager : MonoBehaviour
     private const string NasaSearchUrl = "https://images-api.nasa.gov/search?nasa_id=";
 
     [Header("Pantallas (Menús)")]
-    [SerializeField] private GameObject screenUsers;    // GameObject 'Users'
-    [SerializeField] private GameObject screenGallery;  // GameObject 'Gallery'
+    [SerializeField] private GameObject screenUsers;   
+    [SerializeField] private GameObject screenGallery; 
 
     [Header("Pantalla Users - Tripulantes")]
-    [SerializeField] private UserCardUI[] userCards; // Tamaño 5: Explorer, Astronaut, Astronomer, Commander, Pilot
+    [SerializeField] private UserCardUI[] userCards; // Explorer, Astronaut, Astronomer, Commander, Pilot
 
     [Header("Pantalla Gallery - Elementos")]
     [Tooltip("Asigna las 5 imágenes en orden visual de izquierda a derecha (Lejano Izq, Medio Izq, Centro, Medio Der, Lejano Der)")]
     [SerializeField] private Image[] galleryImageSlots; // Image (3), Image (4), Image (1), Image (2), Image
     [SerializeField] private TextMeshProUGUI txtTitulo;        // Titulo
     [SerializeField] private TextMeshProUGUI txtDescripcion;   // Descripcion
-    [SerializeField] private Button btnBack;                   // Back (Flecha Izquierda)
-    [SerializeField] private Button btnFoward;                 // Foward (Flecha Derecha)
-    [SerializeField] private Button btnExit;                   // Exit (Botón Planeta para volver)
+    [SerializeField] private Button btnBack;                   // Back 
+    [SerializeField] private Button btnFoward;                 // Foward 
+    [SerializeField] private Button btnExit;                   // Exit 
 
     // Estado interno
     private List<UserInfo> usersList = new List<UserInfo>();
@@ -38,7 +38,6 @@ public class NasaGalleryManager : MonoBehaviour
 
     void Start()
     {
-        // Configurar botones de navegación
         if (btnBack != null) btnBack.onClick.AddListener(PrevAsset);
         if (btnFoward != null) btnFoward.onClick.AddListener(NextAsset);
         if (btnExit != null) btnExit.onClick.AddListener(ShowUsersScreen);
@@ -110,7 +109,6 @@ public class NasaGalleryManager : MonoBehaviour
                 if (userCards[i].avatarImage != null)
                     StartCoroutine(DownloadTexture(user.img, userCards[i].avatarImage, user.username));
 
-                // Configurar click para abrir la galería
                 userCards[i].actionButton.onClick.RemoveAllListeners();
                 userCards[i].actionButton.onClick.AddListener(() => ShowGalleryScreen(user));
             }
@@ -190,10 +188,9 @@ public class NasaGalleryManager : MonoBehaviour
 
         int total = selectedUser.deck.Length;
 
-        // Distribución cíclica para los 5 slots visuales: [-2, -1, 0, +1, +2]
         for (int i = 0; i < 5 && i < galleryImageSlots.Length; i++)
         {
-            int offset = i - 2; // -2 (Far Left), -1 (Mid Left), 0 (Center), 1 (Mid Right), 2 (Far Right)
+            int offset = i - 2; 
             int itemIndex = (currentCenterIndex + offset) % total;
             if (itemIndex < 0) itemIndex += total;
 
@@ -207,7 +204,6 @@ public class NasaGalleryManager : MonoBehaviour
                     StartCoroutine(DownloadTexture(asset.imageUrl, galleryImageSlots[i], $"Slot_{i}_{nasaId}"));
                 }
 
-                // Si es el elemento central (offset == 0), actualizar textos principales
                 if (offset == 0)
                 {
                     if (txtTitulo != null) txtTitulo.text = asset.title;
@@ -236,42 +232,47 @@ public class NasaGalleryManager : MonoBehaviour
     #region Utilidad de Descarga de Imágenes
 
     IEnumerator DownloadTexture(string url, Image targetImage, string tag = "Asset")
+{
+    if (string.IsNullOrEmpty(url) || targetImage == null) yield break;
+
+    using (UnityWebRequest req = UnityWebRequestTexture.GetTexture(url.Trim()))
     {
-        if (string.IsNullOrEmpty(url) || targetImage == null) yield break;
+        req.redirectLimit = 5;
+        req.SetRequestHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
 
-        using (UnityWebRequest req = UnityWebRequestTexture.GetTexture(url.Trim()))
+        yield return req.SendWebRequest();
+
+        if (req.result != UnityWebRequest.Result.Success)
         {
-            req.redirectLimit = 5;
-            req.SetRequestHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
-
-            yield return req.SendWebRequest();
-
-            if (req.result != UnityWebRequest.Result.Success)
+            Debug.LogWarning($"[DESCARGA FALLIDA - {tag}] Code: {req.responseCode} | Error: {req.error}");
+        }
+        else
+        {
+            Texture2D texture = DownloadHandlerTexture.GetContent(req);
+            if (texture != null)
             {
-                Debug.LogWarning($"[DESCARGA FALLIDA - {tag}] Code: {req.responseCode} | Error: {req.error}");
-            }
-            else
-            {
-                Texture2D texture = DownloadHandlerTexture.GetContent(req);
-                if (texture != null)
+                texture.filterMode = FilterMode.Bilinear;
+                texture.wrapMode = TextureWrapMode.Clamp;
+
+                Sprite sprite = Sprite.Create(
+                    texture,
+                    new Rect(0, 0, texture.width, texture.height),
+                    new Vector2(0.5f, 0.5f)
+                );
+
+                targetImage.sprite = sprite;
+                targetImage.color = Color.white;
+                targetImage.preserveAspect = false;
+
+                AspectRatioFitter fitter = targetImage.GetComponent<AspectRatioFitter>();
+                if (fitter != null)
                 {
-                    // Fotografías reales de la NASA: Bilinear para máxima calidad y suavizado natural
-                    texture.filterMode = FilterMode.Bilinear;
-                    texture.wrapMode = TextureWrapMode.Clamp;
-
-                    Sprite sprite = Sprite.Create(
-                        texture,
-                        new Rect(0, 0, texture.width, texture.height),
-                        new Vector2(0.5f, 0.5f)
-                    );
-
-                    targetImage.sprite = sprite;
-                    targetImage.color = Color.white;
-                    targetImage.preserveAspect = true;
+                    fitter.aspectRatio = (float)texture.width / texture.height;
                 }
             }
         }
     }
+}
 
     #endregion
 }
